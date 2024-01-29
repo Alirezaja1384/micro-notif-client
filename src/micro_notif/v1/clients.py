@@ -4,8 +4,8 @@ import aio_pika
 from aio_pika.abc import AbstractConnection
 from aio_pika import ExchangeType
 
-from micro_notif.utils import get_exchange
 
+from .utils import get_exchange
 from .types import SMSEventDict
 from .connection import AIOPikaConnectionProvider
 
