@@ -1,8 +1,8 @@
 import json
 
 import aio_pika
+from aio_pika import ExchangeType, DeliveryMode
 from aio_pika.abc import AbstractConnection
-from aio_pika import ExchangeType
 
 
 from .utils import get_exchange
@@ -46,6 +46,11 @@ class MicroNotifRabbitMQClient:
             durable=self._durable,
         ) as exchange:
             await exchange.publish(
-                message=aio_pika.Message(body=json.dumps(message).encode()),
+                message=aio_pika.Message(
+                    body=json.dumps(message).encode(),
+                    delivery_mode=DeliveryMode.PERSISTENT
+                    if self._durable
+                    else DeliveryMode.NOT_PERSISTENT,
+                ),
                 routing_key=f"{self._base_routing_key}.notify.sms",
             )
